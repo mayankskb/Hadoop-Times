@@ -1,0 +1,105 @@
+create table youtubedata (id STRING,uploader STRING,inter INT, category STRING, length INT, nviews INT, rating FLOAT, nrating INT, ncomment INT, rvideos ARRAY<STRING>) row format delimited fields terminated by '\t' lines terminated by '\n' stored as textfile;
+
+
+describe youtubedata;
+
+OK
+id                  	string              	                    
+uploader            	string              	                    
+inter               	int                 	                    
+category            	string              	                    
+length              	int                 	                    
+nviews              	int                 	                    
+rating              	float               	                    
+nrating             	int                 	                    
+ncomment            	int                 	                    
+rvideos             	array<string>       	                    
+Time taken: 0.07 seconds, Fetched: 10 row(s)
+
+//loading data inside the table from the hdfs
+hive> load data inpath '/mayank/youtubedata.txt' overwrite into table youtubedata;
+
+SELECT * FROM youtubedata;
+//Display all the data in the table
+
+hive> DESCRIBE FORMATTED youtubedata;
+OK
+# col_name            	data_type           	comment             
+	 	 
+id                  	string              	                    
+uploader            	string              	                    
+inter               	int                 	                    
+category            	string              	                    
+length              	int                 	                    
+nviews              	int                 	                    
+rating              	float               	                    
+nrating             	int                 	                    
+ncomment            	int                 	                    
+rvideos             	array<string>       	                    
+	 	 
+# Detailed Table Information	 	 
+Database:           	default             	 
+Owner:              	mayankmishra        	 
+CreateTime:         	Wed Oct 25 12:13:19 IST 2017	 
+LastAccessTime:     	UNKNOWN             	 
+Retention:          	0                   	 
+Location:           	hdfs://localhost:9000/user/hive/warehouse/youtubedata	 
+Table Type:         	MANAGED_TABLE       	 
+Table Parameters:	 	 
+	numFiles            	1                   
+	numRows             	0                   
+	rawDataSize         	0                   
+	totalSize           	969389              
+	transient_lastDdlTime	1508914112          
+	 	 
+# Storage Information	 	 
+SerDe Library:      	org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe	 
+InputFormat:        	org.apache.hadoop.mapred.TextInputFormat	 
+OutputFormat:       	org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat	 
+Compressed:         	No                  	 
+Num Buckets:        	-1                  	 
+Bucket Columns:     	[]                  	 
+Sort Columns:       	[]                  	 
+Storage Desc Params:	 	 
+	field.delim         	\t                  
+	line.delim          	\n                  
+	serialization.format	\t                  
+Time taken: 0.176 seconds, Fetched: 40 row(s)
+
+
+
+A. Find out the top 5 categories with maximum number of videos uploaded.
+
+SOl:
+
+hive> SELECT category AS category,COUNT(id) AS counting FROM youtubedata GROUP BY category SORT BY counting DESC LIMIT 5;
+
+Output:
+Total MapReduce CPU Time Spent: 11 seconds 60 msec
+OK
+Entertainment	908
+Music	862
+Comedy	414
+People & Blogs	398
+News & Politics	333
+Time taken: 69.489 seconds, Fetched: 5 row(s)
+
+
+B. Find out the top 10 rated videos.
+
+SOl:
+Though all video rated with 5.0 falls at first place and so on therefore, I tried this solution...
+
+hive> select id, rating from youtubedata where rating In (select distinct rating from youtubedata order by rating DESC limit 10) ORDER By rating DESC;
+Time taken: 88.972 seconds, Fetched: 939 row(s)
+
+
+C. Find out the most viewed videos.
+
+SOl:
+hive> Select id, category, rating, nviews from youtubedata WHERE nviews IN (select max(nviews) from youtubedata);
+output:
+12Z3J1uzd0Q	Film & Animation	3.03	65341925
+
+
+
