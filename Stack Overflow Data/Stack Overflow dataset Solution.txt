@@ -1,0 +1,191 @@
+
+===========================================================================================
+
+
+hive> CREATE TABLE comment
+    > (id int,
+    > userid int)
+    > ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+    > LINES TERMINATED BY '\n'
+    > STORED AS textfile;
+OK
+Time taken: 1.473 seconds
+
+
+hive> LOAD DATA INPATH '/mayank/comments.csv' OVERWRITE INTO TABLE comment;
+Loading data to table default.comment
+OK
+Time taken: 1.263 seconds
+
+
+--------------------------------------------------------------------------
+
+hive>  CREATE TABLE post
+    > (id int,
+    > post_type String,
+    > creationdate String,
+    > score int,
+    > viewcount int,
+    > owneruserid int,
+    > titile String,
+    > answercount int,
+    > commentcount int)
+    > ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+    > LINES TERMINATED BY '\n'
+    > STORED AS textfile;
+OK
+Time taken: 0.135 seconds
+
+hive> LOAD DATA INPATH '/mayank/posts.csv' OVERWRITE INTO TABLE post;
+Loading data to table default.post
+OK
+Time taken: 0.564 seconds
+
+
+--------------------------------------------------------------------------
+
+hive> CREATE TABLE posttype
+    > (id int,
+    > name String)
+    > ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+    > LINES TERMINATED BY '\n'
+    > STORED AS textfile;
+OK
+Time taken: 0.12 seconds
+hive> LOAD DATA INPATH '/mayank/posttypes.csv' OVERWRITE INTO TABLE posttype;
+Loading data to table default.posttype
+OK
+Time taken: 0.471 seconds
+
+--------------------------------------------------------------------------
+
+hive> CREATE TABLE users
+    > (id int,
+    > reputation int,
+    > displayname String,
+    > loc String,
+    > age int)
+    > ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+    > LINES TERMINATED BY '\n'
+    > STORED AS textfile;
+OK
+Time taken: 0.104 seconds
+hive> LOAD DATA INPATH '/mayank/users.csv' OVERWRITE INTO TABLE users;
+Loading data to table default.users
+OK
+Time taken: 0.511 seconds
+
+--------------------------------------------------------------------------
+
+A. Find the display name and no. of posts created by the user who has got maximum reputation.
+SOl:
+hive> SELECT users.displayname, COUNT(post.id) FROM users JOIN post ON users.id=post.owneruserid WHERE users.reputation IN (SELECT MAX(reputation) FROM users) GROUP BY users.displayname;
+
+Output:
+Jon Skeet	1
+
+B. Find the average age of users on the Stack Overflow site.
+SOl:
+
+hive> SELECT CAST(AVG(age) AS INT) FROM users;
+Output:
+OK
+35
+
+
+C. Find the display name of user who posted the oldest post on Stack Overflow (in terms of date).
+
+SOl:
+hive> SELECT users.displayname, post.creationdate FROM users JOIN post ON users.id=post.owneruserid WHERE post.creationdate IN (SELECT creationdate FROM post ORDER BY creationdate ASC LIMIT 1);
+
+Output:
+OK
+Eggs McLaren	2008-07-31 21:42:52
+Time taken: 63.484 seconds, Fetched: 1 row(s)
+
+
+D. Find the display name and no. of comments done by the user who has got maximum reputation.
+SOl:
+hive> SELECT users.displayname, COUNT(comment.id) FROM users JOIN comment ON users.id=comment.userid WHERE users.reputation IN (SELECT MAX(reputation) FROM users) GROUP BY users.displayname;
+
+Output:
+OK
+Jon Skeet	765
+Time taken: 112.028 seconds, Fetched: 1 row(s)
+
+//QUERY to find the display name for the userwho have made maximum comments
+hive> SELECT users.displayname FROM users JOIN comment ON users.id=comment.userid WHERE comment.userid IN (SELECT temp.userid FROM (SELECT userid, COUNT(id) AS cnt FROM comment GROUP BY userid ORDER BY cnt DESC LIMIT 1) temp) group by users.displayname;
+
+Output:
+OK
+Jon Skeet
+Time taken: 98.718 seconds, Fetched: 1 row(s)
+
+
+E. Find the display name of user who has created maximum no. of posts on Stack Overflow.
+SOl:
+hive> SELECT users.displayname, users.id FROM users JOIN post ON users.id=post.owneruserid WHERE post.owneruserid IN (SELECT temp.owneruserid FROM (SELECT owneruserid, COUNT(id) AS cnt FROM post GROUP BY owneruserid ORDER BY cnt DESC LIMIT 1) temp) group by users.displayname, users.id;
+
+Output:
+OK
+aku	1196
+Time taken: 102.15 seconds, Fetched: 1 row(s)
+
+F. Find the owner name and id of user whose post has got maximum no. of view counts so far.
+SOl:
+hive> SELECT users.displayname, users.id FROM users JOIN post ON users.id=post.owneruserid WHERE post.owneruserid IN (SELECT temp.owneruserid FROM (SELECT owneruserid, viewcount FROM post ORDER BY viewcount DESC LIMIT 1) temp) group by users.displayname, users.id;
+
+Output:
+OK
+Shadow_x99	244
+
+G. Find the title and owner name of post who has got maximum no. of Comment count.
+SOl:
+hive>SELECT post.titile, users.displayname FROM users JOIN post ON users.id=post.owneruserid WHERE post.commentcount IN (SELECT temp.commentcount FROM (SELECT titile, owneruserid, commentcount FROM post order by commentcount DESC LIMIT 1) temp) group by post.titile, users.displayname;
+
+Output:
+OK
+	Justin Standard
+Time taken: 110.564 seconds, Fetched: 1 row(s)
+
+//Here we get displayname but didnt get title coz the post do not have any title.
+
+
+H. Find the location which has maximum no of Stack Overflow users.
+SOl:
+hive> SELECT tmpusr.loc FROM (SELECT loc, COUNT(id) AS cid FROM users WHERE loc != '' GROUP BY loc ORDER BY cid DESC LIMIT 1) tmpusr;
+
+Output:
+
+// The maximum user didn't give their location therefore hive will automatically look for the second one
+OK
+United States
+Time taken: 44.173 seconds, Fetched: 1 row(s)
+
+
+I. Find the total no. of answers, posts, comments created by Indian users.
+SOl:
+
+//total number of comments by Indian
+hive> SELECT COUNT(comment.id) FROM comment JOIN users on comment.userid=users.id Where users.loc='India';
+
+Output:
+OK
+150
+Time taken: 29.956 seconds, Fetched: 1 row(s)
+
+//total number of post by Indians
+hive> Select count(post.id) from post join users on post.owneruserid=users.id Where users.loc='India';
+Output:
+OK
+62
+Time taken: 30.037 seconds, Fetched: 1 row(s)
+
+//total number of answers by Indian
+hive> SELECT COUNT(temppost.id) FROM (SELECT id, owneruserid FROM post WHERE post_type IN (SELECT id FROM posttype WHERE name='Answer')) temppost join users on temppost.owneruserid=users.id Where users.loc='India';
+
+Output:
+OK
+31
+Time taken: 28.823 seconds, Fetched: 1 row(s)
+
