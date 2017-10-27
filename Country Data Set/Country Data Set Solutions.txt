@@ -1,0 +1,355 @@
+hive> CREATE TABLE flag
+    > (name String,
+    > landmass int,
+    > zone int,
+    > area int,
+    > population int,
+    > language int,
+    > religion int,
+    > bars int,
+    > stripes int,
+    > colours int,
+    > red int,
+    > green int,
+    > blue int,
+    > gold int,
+    > white int,
+    > black int,
+    > orange int,
+    > mainhue String,
+    > circles int,
+    > crosses int,
+    > saltires int,
+    > quaters int,
+    > sunstars int,
+    > crescent int,
+    > trangle int,
+    > icon int,
+    > animate int,
+    > text int,
+    > topleft String,
+    > botright String)
+    > ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+    > LINES TERMINATED BY '\n'
+    > STORED AS textfile;
+OK
+Time taken: 1.524 seconds
+
+
+
+hive> LOAD DATA INPATH '/mayank/flag.data_dataset.txt' OVERWRITE INTO TABLE flag;
+
+
+//Making some tables and inserting data in Them
+
+TABLE 1. landmassname
+hive> DESCRIBE FORMATTED landmassname;
+OK
+# col_name            	data_type           	comment             
+	 	 
+id                  	int                 	                    
+name                	string              	                    
+	 	 
+# Detailed Table Information	 	 
+Database:           	default             	 
+Owner:              	mayankmishra        	 
+CreateTime:         	Fri Oct 27 13:01:36 IST 2017	 
+LastAccessTime:     	UNKNOWN             	 
+Retention:          	0                   	 
+Location:           	hdfs://localhost:9000/user/hive/warehouse/landmassname	 
+Table Type:         	MANAGED_TABLE       	 
+Table Parameters:	 	 
+	COLUMN_STATS_ACCURATE	{\"BASIC_STATS\":\"true\"}
+	numFiles            	1                   
+	numRows             	6                   
+	rawDataSize         	55                  
+	totalSize           	61                  
+	transient_lastDdlTime	1509089795          
+	 	 
+# Storage Information	 	 
+SerDe Library:      	org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe	 
+InputFormat:        	org.apache.hadoop.mapred.TextInputFormat	 
+OutputFormat:       	org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat	 
+Compressed:         	No                  	 
+Num Buckets:        	-1                  	 
+Bucket Columns:     	[]                  	 
+Sort Columns:       	[]                  	 
+Storage Desc Params:	 	 
+	serialization.format	1                   
+Time taken: 0.285 seconds, Fetched: 31 row(s)
+hive> SELECT * FROM landmassname;
+OK
+1	N. America
+2	S. America
+3	Europe
+4	Africa
+5	Asia
+6	Oceania
+Time taken: 0.156 seconds, Fetched: 6 row(s)
+
+
+TABLE 2. zonename
+
+hive> DESCRIBE FORMATTED zonename;
+OK
+# col_name            	data_type           	comment             
+	 	 
+id                  	int                 	                    
+name                	string              	                    
+	 	 
+# Detailed Table Information	 	 
+Database:           	default             	 
+Owner:              	mayankmishra        	 
+CreateTime:         	Fri Oct 27 13:10:09 IST 2017	 
+LastAccessTime:     	UNKNOWN             	 
+Retention:          	0                   	 
+Location:           	hdfs://localhost:9000/user/hive/warehouse/zonename	 
+Table Type:         	MANAGED_TABLE       	 
+Table Parameters:	 	 
+	COLUMN_STATS_ACCURATE	{\"BASIC_STATS\":\"true\"}
+	numFiles            	1                   
+	numRows             	4                   
+	rawDataSize         	16                  
+	totalSize           	20                  
+	transient_lastDdlTime	1509090081          
+	 	 
+# Storage Information	 	 
+SerDe Library:      	org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe	 
+InputFormat:        	org.apache.hadoop.mapred.TextInputFormat	 
+OutputFormat:       	org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat	 
+Compressed:         	No                  	 
+Num Buckets:        	-1                  	 
+Bucket Columns:     	[]                  	 
+Sort Columns:       	[]                  	 
+Storage Desc Params:	 	 
+	serialization.format	1                   
+Time taken: 0.043 seconds, Fetched: 31 row(s)
+hive> SELECT * FROM zonename;
+OK
+1	NE
+2	SE
+3	SW
+4	NW
+Time taken: 0.145 seconds, Fetched: 4 row(s)
+hive> 
+
+TABLE 3. languagename
+
+hive> DESCRIBE FORMATTED languagename;
+OK
+# col_name            	data_type           	comment             
+	 	 
+id                  	int                 	                    
+name                	string              	                    
+	 	 
+# Detailed Table Information	 	 
+Database:           	default             	 
+Owner:              	mayankmishra        	 
+CreateTime:         	Fri Oct 27 13:13:07 IST 2017	 
+LastAccessTime:     	UNKNOWN             	 
+Retention:          	0                   	 
+Location:           	hdfs://localhost:9000/user/hive/warehouse/languagename	 
+Table Type:         	MANAGED_TABLE       	 
+Table Parameters:	 	 
+	COLUMN_STATS_ACCURATE	{\"BASIC_STATS\":\"true\"}
+	numFiles            	1                   
+	numRows             	10                  
+	rawDataSize         	122                 
+	totalSize           	132                 
+	transient_lastDdlTime	1509090421          
+	 	 
+# Storage Information	 	 
+SerDe Library:      	org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe	 
+InputFormat:        	org.apache.hadoop.mapred.TextInputFormat	 
+OutputFormat:       	org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat	 
+Compressed:         	No                  	 
+Num Buckets:        	-1                  	 
+Bucket Columns:     	[]                  	 
+Sort Columns:       	[]                  	 
+Storage Desc Params:	 	 
+	serialization.format	1                   
+Time taken: 0.041 seconds, Fetched: 31 row(s)
+hive> SELECT * FROM languagename;
+OK
+1	English
+2	Spanish
+3	French
+4	German
+5	Slavic
+6	Other Indo-European
+7	Chinese
+8	Arabic
+9	Japanese/Turkish/Finnish/Magyar
+10	Others
+Time taken: 0.116 seconds, Fetched: 10 row(s)
+
+
+TABLE 4. religionname
+
+hive> DESCRIBE FORMATTED religionname;
+OK
+# col_name            	data_type           	comment             
+	 	 
+id                  	int                 	                    
+name                	string              	                    
+	 	 
+# Detailed Table Information	 	 
+Database:           	default             	 
+Owner:              	mayankmishra        	 
+CreateTime:         	Fri Oct 27 13:19:51 IST 2017	 
+LastAccessTime:     	UNKNOWN             	 
+Retention:          	0                   	 
+Location:           	hdfs://localhost:9000/user/hive/warehouse/religionname	 
+Table Type:         	MANAGED_TABLE       	 
+Table Parameters:	 	 
+	COLUMN_STATS_ACCURATE	{\"BASIC_STATS\":\"true\"}
+	numFiles            	1                   
+	numRows             	8                   
+	rawDataSize         	77                  
+	totalSize           	85                  
+	transient_lastDdlTime	1509090802          
+	 	 
+# Storage Information	 	 
+SerDe Library:      	org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe	 
+InputFormat:        	org.apache.hadoop.mapred.TextInputFormat	 
+OutputFormat:       	org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat	 
+Compressed:         	No                  	 
+Num Buckets:        	-1                  	 
+Bucket Columns:     	[]                  	 
+Sort Columns:       	[]                  	 
+Storage Desc Params:	 	 
+	serialization.format	1                   
+Time taken: 0.034 seconds, Fetched: 31 row(s)
+hive> SELECT * FROM religionname;
+OK
+0	Catholic
+1	Other Christian
+2	Muslim
+3	Buddhist
+4	Hindu
+5	Ethnic
+6	Marxist
+7	Others
+Time taken: 0.112 seconds, Fetched: 8 row(s)
+
+
+A. Count number of countries based on landmass.
+SOl:
+
+hive> SELECT landmassname.name, COUNT(flag.landmass) FROM landmassname JOIN flag ON landmassname.id=flag.landmass GROUP BY landmassname.name;
+
+Output:
+
+Total MapReduce CPU Time Spent: 6 seconds 110 msec
+OK
+Africa	52
+Asia	39
+Europe	35
+N. America	31
+Oceania	20
+S. America	17
+Time taken: 29.392 seconds, Fetched: 6 row(s)
+
+B. Find out top 5 country with Sum of bars and strips in a flag.
+SOl:
+
+hive> SELECT name, (bars+stripes) as barstrip FROM flag ORDER BY barstrip DESC LIMIT 5;
+
+Output:
+OK
+Malaysia	14
+USA	13
+Liberia	11
+Uruguay	9
+Greece	9
+Time taken: 24.835 seconds, Fetched: 5 row(s)
+
+C. Count of countries with icon.
+
+SOl:
+hive> SELECT count(name) FROM flag WHERE icon=1; 
+
+Output:
+Total MapReduce CPU Time Spent: 6 seconds 230 msec
+OK
+49
+Time taken: 21.297 seconds, Fetched: 1 row(s)
+
+D. Count of countries which have same top left and bottom right color in flag.
+SOl:
+
+hive> SELECT COUNT(a.name) FROM flag a JOIN flag b WHERE a.name != b.name AND a.topleft=b.topleft AND a.botright=b.botright;
+
+Output:
+Total MapReduce CPU Time Spent: 7 seconds 570 msec
+OK
+2390
+Time taken: 27.852 seconds, Fetched: 1 row(s)
+
+
+E. Count number of countries based on zone.
+SOl:
+hive> SELECT zonename.name, COUNT(flag.zone) FROM zonename JOIN flag ON zonename.id=flag.zone GROUP BY zonename.name;
+
+Output:
+
+Total MapReduce CPU Time Spent: 6 seconds 200 msec
+OK
+NE	91
+NW	58
+SE	29
+SW	16
+Time taken: 27.919 seconds, Fetched: 4 row(s)
+
+F. Find out largest county in terms of area in NE zone.
+SOl:
+
+hive> SELECT name, area FROM flag WHERE area IN (SELECT MAX(area) FROM flag WHERE zone IN (SELECT id from zonename WHERE name='NE'));
+
+Output:
+Total MapReduce CPU Time Spent: 14 seconds 610 msec
+OK
+USSR	22402
+Time taken: 66.792 seconds, Fetched: 1 row(s)
+
+G. Find out least populated country in S.America landmass.
+SOl:
+hive> SELECT name, population FROM flag WHERE landmass IN (SELECT id FROM landmassname WHERE name='S. America') ORDER BY population ASC LIMIT 1;
+
+Output:
+OK
+Falklands-Malvinas	0
+Time taken: 27.078 seconds, Fetched: 1 row(s)
+
+H. Find out largest speaking language among all countries.
+SOl:
+hive> SELECT name from languagename WHERE id IN (SELECT tmpflag.language FROM (SELECT language, COUNT(language) AS clang FROM flag GROUP BY language ORDER BY clang DESC LIMIT 1) tmpflag);
+
+Output:
+OK
+Others
+Time taken: 65.915 seconds, Fetched: 1 row(s)
+
+I. Find most common colour among flags from all countries.
+SOl:
+hive> set hive.cli.print.header=true;
+
+
+
+J. Sum of all circles present in all country flags.
+SOl:
+hive> SELECT SUM(circles) AS SUM_OF_CIRCLE FROM flag;
+
+Output:
+OK
+33
+Time taken: 20.825 seconds, Fetched: 1 row(s)
+
+K. Count of countries which have both icon and text in flag.
+SOl:
+hive> SELECT name FROM flag WHERE icon=1 AND text=1;
+Output:
+OK
+13
+Time taken: 21.03 seconds, Fetched: 1 row(s)
+
