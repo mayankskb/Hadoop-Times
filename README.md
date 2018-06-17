@@ -1,2 +1,2 @@
 # hadoop_practices
-Practise programs in hadoop ecosystem for refrence
+Practise programs in hadoop ecosystem kept here for reference
