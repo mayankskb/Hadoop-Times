@@ -1,2 +1,2 @@
-# hadoop_practices
+# Hadoop-Times
 Practise programs using hadoop stack
